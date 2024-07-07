@@ -1,0 +1,113 @@
+ASxxxx Assembler V02.00 + NoICE + SDCC mods  (GameBoy)                  Page 1
+Hexadecimal [24-Bits]
+
+Symbol Table
+
+    .__.$$$.                                                    =  002710 L
+    .__.ABS.                                                    =  000000 G
+    .__.CPU.                                                    =  000000 L
+    .__.H$L.                                                    =  000000 L
+    _NR10_REG                                                      ****** GX
+    _NR11_REG                                                      ****** GX
+    _NR12_REG                                                      ****** GX
+    _NR13_REG                                                      ****** GX
+    _NR14_REG                                                      ****** GX
+    _NR50_REG                                                      ****** GX
+    _NR51_REG                                                      ****** GX
+    _NR52_REG                                                      ****** GX
+  2 _SS                                                            00010C GR
+  2 _TileLabel                                                     00000C GR
+  0 ___str_0                                                       000047 R
+  0 ___str_10                                                      000333 R
+  0 ___str_11                                                      000383 R
+  0 ___str_13                                                      000398 R
+  0 ___str_14                                                      00039A R
+  0 ___str_16                                                      0003B7 R
+  0 ___str_17                                                      0003B9 R
+  0 ___str_18                                                      000467 R
+  0 ___str_2                                                       00005C R
+  0 ___str_20                                                      00047C R
+  0 ___str_21                                                      00047E R
+  0 ___str_23                                                      0004BF R
+  0 ___str_24                                                      0004C2 R
+  0 ___str_25                                                      0005DC R
+  0 ___str_27                                                      0005F1 R
+  0 ___str_28                                                      0005F3 R
+  0 ___str_3                                                       00005E R
+  0 ___str_30                                                      000609 R
+  0 ___str_31                                                      00060C R
+  0 ___str_32                                                      0007B4 R
+  0 ___str_33                                                      0007B6 R
+  0 ___str_34                                                      0007CD R
+  0 ___str_35                                                      0007DB R
+  0 ___str_5                                                       00006C R
+  0 ___str_6                                                       00006F R
+  0 ___str_7                                                       000082 R
+  0 ___str_8                                                       0002C4 R
+  0 ___str_9                                                       0002D9 R
+    __divsint                                                      ****** GX
+    __modsint                                                      ****** GX
+    __muluchar                                                     ****** GX
+  7 __xinit__SS                                                    00010C R
+  7 __xinit__TileLabel                                             00000C R
+  7 __xinit__amount                                                000006 R
+  7 __xinit__b                                                     000001 R
+  7 __xinit__countTimer                                            00000A R
+  7 __xinit__j                                                     000004 R
+  7 __xinit__l                                                     000005 R
+  7 __xinit__r                                                     000007 R
+  7 __xinit__s                                                     000000 R
+  7 __xinit__stopCount                                             00000B R
+ASxxxx Assembler V02.00 + NoICE + SDCC mods  (GameBoy)                  Page 2
+Hexadecimal [24-Bits]
+
+Symbol Table
+
+  2 _amount                                                        000006 GR
+  2 _b                                                             000001 GR
+  0 _btwJoy                                                        0000C2 GR
+  0 _btwScreen                                                     000000 GR
+    _cls                                                           ****** GX
+  2 _countTimer                                                    00000A GR
+  0 _currencyJoy                                                   0003F9 GR
+  0 _currencyScreen                                                00034E GR
+    _delay                                                         ****** GX
+  0 _getEenheid                                                    000162 GR
+  0 _getHonderdtal                                                 000180 GR
+  0 _getTiental                                                    00016D GR
+  2 _j                                                             000004 GR
+    _joypad                                                        ****** GX
+  2 _l                                                             000005 GR
+  0 _main                                                          000626 GR
+    _printf                                                        ****** GX
+    _puts                                                          ****** GX
+  2 _r                                                             000007 GR
+    _rRAMG                                                         ****** GX
+  0 _result                                                        000193 GR
+  2 _s                                                             000000 GR
+    _saveTimer                                                     ****** GX
+    _savefile                                                      ****** GX
+  0 _selectionScreen                                               0005A4 GR
+    _set_sprite_data                                               ****** GX
+    _shadow_OAM                                                    ****** GX
+  2 _stopCount                                                     00000B GR
+  0 _timerJoy                                                      0004FC GR
+  0 _timerScreen                                                   000423 GR
+  0 _timerSystem                                                   000550 GR
+
+
+ASxxxx Assembler V02.00 + NoICE + SDCC mods  (GameBoy)                  Page 3
+Hexadecimal [24-Bits]
+
+Area Table
+
+   0 _CODE                                      size    7E7   flags    0
+   1 _DATA                                      size      0   flags    0
+   2 _INITIALIZED                               size    114   flags    0
+   3 _DABS                                      size      0   flags    8
+   4 _HOME                                      size      0   flags    0
+   5 _GSINIT                                    size      0   flags    0
+   6 _GSFINAL                                   size      0   flags    0
+   7 _INITIALIZER                               size    114   flags    0
+   8 _CABS                                      size      0   flags    8
+

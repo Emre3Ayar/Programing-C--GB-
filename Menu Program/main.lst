@@ -1,0 +1,1624 @@
+                                      1 ;--------------------------------------------------------
+                                      2 ; File Created by SDCC : free open source ISO C Compiler 
+                                      3 ; Version 4.3.2 #14228 (MINGW64)
+                                      4 ;--------------------------------------------------------
+                                      5 	.module main
+                                      6 	.optsdcc -msm83
+                                      7 	
+                                      8 ;--------------------------------------------------------
+                                      9 ; Public variables in this module
+                                     10 ;--------------------------------------------------------
+                                     11 	.globl _main
+                                     12 	.globl _selectionScreen
+                                     13 	.globl _timerSystem
+                                     14 	.globl _timerJoy
+                                     15 	.globl _timerScreen
+                                     16 	.globl _currencyJoy
+                                     17 	.globl _currencyScreen
+                                     18 	.globl _result
+                                     19 	.globl _getHonderdtal
+                                     20 	.globl _getTiental
+                                     21 	.globl _getEenheid
+                                     22 	.globl _btwJoy
+                                     23 	.globl _btwScreen
+                                     24 	.globl _puts
+                                     25 	.globl _printf
+                                     26 	.globl _set_sprite_data
+                                     27 	.globl _joypad
+                                     28 	.globl _delay
+                                     29 	.globl _SS
+                                     30 	.globl _TileLabel
+                                     31 	.globl _stopCount
+                                     32 	.globl _countTimer
+                                     33 	.globl _r
+                                     34 	.globl _amount
+                                     35 	.globl _l
+                                     36 	.globl _j
+                                     37 	.globl _b
+                                     38 	.globl _s
+                                     39 ;--------------------------------------------------------
+                                     40 ; special function registers
+                                     41 ;--------------------------------------------------------
+                                     42 ;--------------------------------------------------------
+                                     43 ; ram data
+                                     44 ;--------------------------------------------------------
+                                     45 	.area _DATA
+                                     46 ;--------------------------------------------------------
+                                     47 ; ram data
+                                     48 ;--------------------------------------------------------
+                                     49 	.area _INITIALIZED
+      000000                         50 _s::
+      000000                         51 	.ds 1
+      000001                         52 _b::
+      000001                         53 	.ds 3
+      000004                         54 _j::
+      000004                         55 	.ds 1
+      000005                         56 _l::
+      000005                         57 	.ds 1
+      000006                         58 _amount::
+      000006                         59 	.ds 1
+      000007                         60 _r::
+      000007                         61 	.ds 3
+      00000A                         62 _countTimer::
+      00000A                         63 	.ds 1
+      00000B                         64 _stopCount::
+      00000B                         65 	.ds 1
+      00000C                         66 _TileLabel::
+      00000C                         67 	.ds 256
+      00010C                         68 _SS::
+      00010C                         69 	.ds 8
+                                     70 ;--------------------------------------------------------
+                                     71 ; absolute external ram data
+                                     72 ;--------------------------------------------------------
+                                     73 	.area _DABS (ABS)
+                                     74 ;--------------------------------------------------------
+                                     75 ; global & static initialisations
+                                     76 ;--------------------------------------------------------
+                                     77 	.area _HOME
+                                     78 	.area _GSINIT
+                                     79 	.area _GSFINAL
+                                     80 	.area _GSINIT
+                                     81 ;--------------------------------------------------------
+                                     82 ; Home
+                                     83 ;--------------------------------------------------------
+                                     84 	.area _HOME
+                                     85 	.area _HOME
+                                     86 ;--------------------------------------------------------
+                                     87 ; code
+                                     88 ;--------------------------------------------------------
+                                     89 	.area _CODE
+                                     90 ;BTW.c:8: void btwScreen(){
+                                     91 ;	---------------------------------
+                                     92 ; Function btwScreen
+                                     93 ; ---------------------------------
+      000000                         94 _btwScreen::
+                                     95 ;BTW.c:9: printf("^^^^^^^^^^^^^^^^^^^^");
+      000000 11r47r00         [12]   96 	ld	de, #___str_0
+      000003 D5               [16]   97 	push	de
+      000004 CDr00r00         [24]   98 	call	_printf
+      000007 E1               [12]   99 	pop	hl
+                                    100 ;BTW.c:10: printf("\n\n");
+      000008 11r5Cr00         [12]  101 	ld	de, #___str_2
+      00000B CDr00r00         [24]  102 	call	_puts
+                                    103 ;BTW.c:11: printf("   Bedrag: %d", j);
+      00000E 21r04r00         [12]  104 	ld	hl, #_j
+      000011 4E               [ 8]  105 	ld	c, (hl)
+      000012 06 00            [ 8]  106 	ld	b, #0x00
+      000014 C5               [16]  107 	push	bc
+      000015 11r5Er00         [12]  108 	ld	de, #___str_3
+      000018 D5               [16]  109 	push	de
+      000019 CDr00r00         [24]  110 	call	_printf
+      00001C E8 04            [16]  111 	add	sp, #4
+                                    112 ;BTW.c:12: printf("\n\n\n");
+      00001E 11r6Cr00         [12]  113 	ld	de, #___str_5
+      000021 CDr00r00         [24]  114 	call	_puts
+                                    115 ;BTW.c:13: printf("   BTW Percent: %d", b[s]);
+      000024 01r01r00         [12]  116 	ld	bc, #_b+0
+      000027 79               [ 4]  117 	ld	a, c
+      000028 21r00r00         [12]  118 	ld	hl, #_s
+      00002B 86               [ 8]  119 	add	a, (hl)
+      00002C 4F               [ 4]  120 	ld	c, a
+      00002D 30 01            [12]  121 	jr	NC, 00103$
+      00002F 04               [ 4]  122 	inc	b
+      000030                        123 00103$:
+      000030 0A               [ 8]  124 	ld	a, (bc)
+      000031 4F               [ 4]  125 	ld	c, a
+      000032 06 00            [ 8]  126 	ld	b, #0x00
+      000034 C5               [16]  127 	push	bc
+      000035 11r6Fr00         [12]  128 	ld	de, #___str_6
+      000038 D5               [16]  129 	push	de
+      000039 CDr00r00         [24]  130 	call	_printf
+      00003C E8 04            [16]  131 	add	sp, #4
+                                    132 ;BTW.c:14: printf("\n\n\n\n\n\n Made By\n\n  Emre Ayar\n  Speedysm1des\n^^^^^^^^^^^^^^^^^^^^");
+      00003E 11r82r00         [12]  133 	ld	de, #___str_7
+      000041 D5               [16]  134 	push	de
+      000042 CDr00r00         [24]  135 	call	_printf
+      000045 E1               [12]  136 	pop	hl
+                                    137 ;BTW.c:15: }
+      000046 C9               [16]  138 	ret
+      000047                        139 ___str_0:
+      000047 5E 5E 5E 5E 5E 5E 5E   140 	.ascii "^^^^^^^^^^^^^^^^^^^^"
+             5E 5E 5E 5E 5E 5E 5E
+             5E 5E 5E 5E 5E 5E
+      00005B 00                     141 	.db 0x00
+      00005C                        142 ___str_2:
+      00005C 0A                     143 	.db 0x0a
+      00005D 00                     144 	.db 0x00
+      00005E                        145 ___str_3:
+      00005E 20 20 20 42 65 64 72   146 	.ascii "   Bedrag: %d"
+             61 67 3A 20 25 64
+      00006B 00                     147 	.db 0x00
+      00006C                        148 ___str_5:
+      00006C 0A                     149 	.db 0x0a
+      00006D 0A                     150 	.db 0x0a
+      00006E 00                     151 	.db 0x00
+      00006F                        152 ___str_6:
+      00006F 20 20 20 42 54 57 20   153 	.ascii "   BTW Percent: %d"
+             50 65 72 63 65 6E 74
+             3A 20 25 64
+      000081 00                     154 	.db 0x00
+      000082                        155 ___str_7:
+      000082 0A                     156 	.db 0x0a
+      000083 0A                     157 	.db 0x0a
+      000084 0A                     158 	.db 0x0a
+      000085 0A                     159 	.db 0x0a
+      000086 0A                     160 	.db 0x0a
+      000087 0A                     161 	.db 0x0a
+      000088 20 4D 61 64 65 20 42   162 	.ascii " Made By"
+             79
+      000090 0A                     163 	.db 0x0a
+      000091 0A                     164 	.db 0x0a
+      000092 20 20 45 6D 72 65 20   165 	.ascii "  Emre Ayar"
+             41 79 61 72
+      00009D 0A                     166 	.db 0x0a
+      00009E 20 20 53 70 65 65 64   167 	.ascii "  Speedysm1des"
+             79 73 6D 31 64 65 73
+      0000AC 0A                     168 	.db 0x0a
+      0000AD 5E 5E 5E 5E 5E 5E 5E   169 	.ascii "^^^^^^^^^^^^^^^^^^^^"
+             5E 5E 5E 5E 5E 5E 5E
+             5E 5E 5E 5E 5E 5E
+      0000C1 00                     170 	.db 0x00
+                                    171 ;BTW.c:16: void btwJoy(){
+                                    172 ;	---------------------------------
+                                    173 ; Function btwJoy
+                                    174 ; ---------------------------------
+      0000C2                        175 _btwJoy::
+                                    176 ;BTW.c:17: if (J_DOWN & joypad()) {
+      0000C2 CDr00r00         [24]  177 	call	_joypad
+      0000C5 CB 5F            [ 8]  178 	bit	3, a
+      0000C7 28 0D            [12]  179 	jr	Z, 00124$
+                                    180 ;BTW.c:18: j--;
+      0000C9 21r04r00         [12]  181 	ld	hl, #_j
+      0000CC 35               [12]  182 	dec	(hl)
+                                    183 ;BTW.c:19: cls();
+      0000CD CDr00r00         [24]  184 	call	_cls
+                                    185 ;BTW.c:20: btwScreen();
+      0000D0 CDr00r00         [24]  186 	call	_btwScreen
+      0000D3 C3r5Cr01         [16]  187 	jp	00125$
+      0000D6                        188 00124$:
+                                    189 ;BTW.c:22: else if (J_UP & joypad()) {
+      0000D6 CDr00r00         [24]  190 	call	_joypad
+      0000D9 CB 57            [ 8]  191 	bit	2, a
+      0000DB 28 0C            [12]  192 	jr	Z, 00121$
+                                    193 ;BTW.c:23: j++;
+      0000DD 21r04r00         [12]  194 	ld	hl, #_j
+      0000E0 34               [12]  195 	inc	(hl)
+                                    196 ;BTW.c:24: cls();
+      0000E1 CDr00r00         [24]  197 	call	_cls
+                                    198 ;BTW.c:25: btwScreen();
+      0000E4 CDr00r00         [24]  199 	call	_btwScreen
+      0000E7 18 73            [12]  200 	jr	00125$
+      0000E9                        201 00121$:
+                                    202 ;BTW.c:27: else if (J_RIGHT & joypad()) {
+      0000E9 CDr00r00         [24]  203 	call	_joypad
+      0000EC 0F               [ 4]  204 	rrca
+      0000ED 30 1E            [12]  205 	jr	NC, 00118$
+                                    206 ;BTW.c:28: if (s < l && s != l) {
+      0000EF FAr00r00         [16]  207 	ld	a, (#_s)
+      0000F2 21r05r00         [12]  208 	ld	hl, #_l
+      0000F5 96               [ 8]  209 	sub	a, (hl)
+      0000F6 30 0D            [12]  210 	jr	NC, 00102$
+      0000F8 FAr00r00         [16]  211 	ld	a, (#_s)
+      0000FB 21r05r00         [12]  212 	ld	hl, #_l
+      0000FE 96               [ 8]  213 	sub	a, (hl)
+      0000FF 28 04            [12]  214 	jr	Z, 00102$
+                                    215 ;BTW.c:29: s++;
+      000101 21r00r00         [12]  216 	ld	hl, #_s
+      000104 34               [12]  217 	inc	(hl)
+      000105                        218 00102$:
+                                    219 ;BTW.c:31: cls();
+      000105 CDr00r00         [24]  220 	call	_cls
+                                    221 ;BTW.c:32: btwScreen();
+      000108 CDr00r00         [24]  222 	call	_btwScreen
+      00010B 18 4F            [12]  223 	jr	00125$
+      00010D                        224 00118$:
+                                    225 ;BTW.c:34: else if (J_LEFT & joypad()) {
+      00010D CDr00r00         [24]  226 	call	_joypad
+      000110 CB 4F            [ 8]  227 	bit	1, a
+      000112 28 10            [12]  228 	jr	Z, 00115$
+                                    229 ;BTW.c:35: if (s > 0) {
+      000114 21r00r00         [12]  230 	ld	hl, #_s
+      000117 7E               [ 8]  231 	ld	a, (hl)
+      000118 B7               [ 4]  232 	or	a, a
+      000119 28 01            [12]  233 	jr	Z, 00105$
+                                    234 ;BTW.c:36: s--;
+      00011B 35               [12]  235 	dec	(hl)
+      00011C                        236 00105$:
+                                    237 ;BTW.c:38: cls();
+      00011C CDr00r00         [24]  238 	call	_cls
+                                    239 ;BTW.c:39: btwScreen();
+      00011F CDr00r00         [24]  240 	call	_btwScreen
+      000122 18 38            [12]  241 	jr	00125$
+      000124                        242 00115$:
+                                    243 ;BTW.c:41: else if (J_START & joypad()) {
+      000124 CDr00r00         [24]  244 	call	_joypad
+      000127 07               [ 4]  245 	rlca
+      000128 30 08            [12]  246 	jr	NC, 00112$
+                                    247 ;BTW.c:42: cls();
+      00012A CDr00r00         [24]  248 	call	_cls
+                                    249 ;BTW.c:43: result();
+      00012D CDr93r01         [24]  250 	call	_result
+      000130 18 2A            [12]  251 	jr	00125$
+      000132                        252 00112$:
+                                    253 ;BTW.c:45: else if (J_A & joypad()) {
+      000132 CDr00r00         [24]  254 	call	_joypad
+      000135 CB 67            [ 8]  255 	bit	4, a
+      000137 28 0F            [12]  256 	jr	Z, 00109$
+                                    257 ;BTW.c:46: j = j + 10;
+      000139 21r04r00         [12]  258 	ld	hl, #_j
+      00013C 7E               [ 8]  259 	ld	a, (hl)
+      00013D C6 0A            [ 8]  260 	add	a, #0x0a
+      00013F 77               [ 8]  261 	ld	(hl), a
+                                    262 ;BTW.c:47: cls();
+      000140 CDr00r00         [24]  263 	call	_cls
+                                    264 ;BTW.c:48: btwScreen();
+      000143 CDr00r00         [24]  265 	call	_btwScreen
+      000146 18 14            [12]  266 	jr	00125$
+      000148                        267 00109$:
+                                    268 ;BTW.c:50: else if (J_B & joypad()) {
+      000148 CDr00r00         [24]  269 	call	_joypad
+      00014B CB 6F            [ 8]  270 	bit	5, a
+      00014D 28 0D            [12]  271 	jr	Z, 00125$
+                                    272 ;BTW.c:51: j = j - 10;
+      00014F 21r04r00         [12]  273 	ld	hl, #_j
+      000152 7E               [ 8]  274 	ld	a, (hl)
+      000153 C6 F6            [ 8]  275 	add	a, #0xf6
+      000155 77               [ 8]  276 	ld	(hl), a
+                                    277 ;BTW.c:52: cls();
+      000156 CDr00r00         [24]  278 	call	_cls
+                                    279 ;BTW.c:53: btwScreen();
+      000159 CDr00r00         [24]  280 	call	_btwScreen
+      00015C                        281 00125$:
+                                    282 ;BTW.c:55: delay(500);
+      00015C 11 F4 01         [12]  283 	ld	de, #0x01f4
+                                    284 ;BTW.c:56: }
+      00015F C3r00r00         [16]  285 	jp	_delay
+                                    286 ;BTW.c:57: UINT8 getEenheid(UINT8 n){
+                                    287 ;	---------------------------------
+                                    288 ; Function getEenheid
+                                    289 ; ---------------------------------
+      000162                        290 _getEenheid::
+                                    291 ;BTW.c:58: return n % 10;
+      000162 5F               [ 4]  292 	ld	e, a
+      000163 16 00            [ 8]  293 	ld	d, #0x00
+      000165 01 0A 00         [12]  294 	ld	bc, #0x000a
+      000168 CDr00r00         [24]  295 	call	__modsint
+      00016B 79               [ 4]  296 	ld	a, c
+                                    297 ;BTW.c:59: }
+      00016C C9               [16]  298 	ret
+                                    299 ;BTW.c:60: UINT8 getTiental(UINT8 n){
+                                    300 ;	---------------------------------
+                                    301 ; Function getTiental
+                                    302 ; ---------------------------------
+      00016D                        303 _getTiental::
+                                    304 ;BTW.c:61: return (n / 10) % 10;
+      00016D 5F               [ 4]  305 	ld	e, a
+      00016E 16 00            [ 8]  306 	ld	d, #0x00
+      000170 01 0A 00         [12]  307 	ld	bc, #0x000a
+      000173 CDr00r00         [24]  308 	call	__divsint
+      000176 59               [ 4]  309 	ld	e, c
+      000177 50               [ 4]  310 	ld	d, b
+      000178 01 0A 00         [12]  311 	ld	bc, #0x000a
+      00017B CDr00r00         [24]  312 	call	__modsint
+      00017E 79               [ 4]  313 	ld	a, c
+                                    314 ;BTW.c:62: }
+      00017F C9               [16]  315 	ret
+                                    316 ;BTW.c:63: UINT8 getHonderdtal(UINT8 n){
+                                    317 ;	---------------------------------
+                                    318 ; Function getHonderdtal
+                                    319 ; ---------------------------------
+      000180                        320 _getHonderdtal::
+                                    321 ;BTW.c:64: return (n / 100) % 10;
+      000180 5F               [ 4]  322 	ld	e, a
+      000181 16 00            [ 8]  323 	ld	d, #0x00
+      000183 01 64 00         [12]  324 	ld	bc, #0x0064
+      000186 CDr00r00         [24]  325 	call	__divsint
+      000189 59               [ 4]  326 	ld	e, c
+      00018A 50               [ 4]  327 	ld	d, b
+      00018B 01 0A 00         [12]  328 	ld	bc, #0x000a
+      00018E CDr00r00         [24]  329 	call	__modsint
+      000191 79               [ 4]  330 	ld	a, c
+                                    331 ;BTW.c:65: }
+      000192 C9               [16]  332 	ret
+                                    333 ;BTW.c:66: void result(){
+                                    334 ;	---------------------------------
+                                    335 ; Function result
+                                    336 ; ---------------------------------
+      000193                        337 _result::
+      000193 E8 F6            [16]  338 	add	sp, #-10
+                                    339 ;BTW.c:68: printf("--------------------");
+      000195 11rC4r02         [12]  340 	ld	de, #___str_8
+      000198 D5               [16]  341 	push	de
+      000199 CDr00r00         [24]  342 	call	_printf
+      00019C E1               [12]  343 	pop	hl
+                                    344 ;BTW.c:72: UINT8 e = getEenheid(j);
+      00019D FAr04r00         [16]  345 	ld	a, (#_j)
+      0001A0 CDr62r01         [24]  346 	call	_getEenheid
+      0001A3 F8 08            [12]  347 	ldhl	sp,	#8
+      0001A5 77               [ 8]  348 	ld	(hl), a
+                                    349 ;BTW.c:73: UINT8 t = getTiental(j);
+      0001A6 FAr04r00         [16]  350 	ld	a, (#_j)
+      0001A9 CDr6Dr01         [24]  351 	call	_getTiental
+      0001AC F8 09            [12]  352 	ldhl	sp,	#9
+      0001AE 77               [ 8]  353 	ld	(hl), a
+                                    354 ;BTW.c:74: UINT8 h = getHonderdtal(j);
+      0001AF FAr04r00         [16]  355 	ld	a, (#_j)
+      0001B2 CDr80r01         [24]  356 	call	_getHonderdtal
+      0001B5 4F               [ 4]  357 	ld	c, a
+                                    358 ;BTW.c:76: UINT8 v = e*b[s];
+      0001B6 3Er01            [ 8]  359 	ld	a, #<(_b)
+      0001B8 21r00r00         [12]  360 	ld	hl, #_s
+      0001BB 86               [ 8]  361 	add	a, (hl)
+      0001BC 5F               [ 4]  362 	ld	e, a
+      0001BD 3Es00            [ 8]  363 	ld	a, #>(_b)
+      0001BF CE 00            [ 8]  364 	adc	a, #0x00
+      0001C1 57               [ 4]  365 	ld	d, a
+      0001C2 1A               [ 8]  366 	ld	a, (de)
+      0001C3 47               [ 4]  367 	ld	b, a
+      0001C4 C5               [16]  368 	push	bc
+      0001C5 58               [ 4]  369 	ld	e, b
+      0001C6 F8 0A            [12]  370 	ldhl	sp,	#10
+      0001C8 7E               [ 8]  371 	ld	a, (hl)
+                                    372 ;BTW.c:77: UINT8 vv = t*b[s];
+      0001C9 CDr00r00         [24]  373 	call	__muluchar
+      0001CC F8 07            [12]  374 	ldhl	sp,	#7
+      0001CE 71               [ 8]  375 	ld	(hl), c
+      0001CF C1               [12]  376 	pop	bc
+      0001D0 C5               [16]  377 	push	bc
+      0001D1 58               [ 4]  378 	ld	e, b
+      0001D2 F8 0B            [12]  379 	ldhl	sp,	#11
+      0001D4 7E               [ 8]  380 	ld	a, (hl)
+                                    381 ;BTW.c:78: UINT8 vvv = h*b[s];
+      0001D5 CDr00r00         [24]  382 	call	__muluchar
+      0001D8 F8 08            [12]  383 	ldhl	sp,	#8
+      0001DA 71               [ 8]  384 	ld	(hl), c
+      0001DB C1               [12]  385 	pop	bc
+      0001DC 58               [ 4]  386 	ld	e, b
+      0001DD 79               [ 4]  387 	ld	a, c
+                                    388 ;BTW.c:80: UINT8 een = getEenheid(vv) + getTiental(v);
+      0001DE CDr00r00         [24]  389 	call	__muluchar
+      0001E1 F8 07            [12]  390 	ldhl	sp,	#7
+      0001E3 71               [ 8]  391 	ld	(hl), c
+      0001E4 F8 06            [12]  392 	ldhl	sp,	#6
+      0001E6 7E               [ 8]  393 	ld	a, (hl)
+      0001E7 CDr62r01         [24]  394 	call	_getEenheid
+      0001EA 4F               [ 4]  395 	ld	c, a
+      0001EB C5               [16]  396 	push	bc
+      0001EC F8 07            [12]  397 	ldhl	sp,	#7
+      0001EE 7E               [ 8]  398 	ld	a, (hl)
+      0001EF CDr6Dr01         [24]  399 	call	_getTiental
+      0001F2 C1               [12]  400 	pop	bc
+      0001F3 81               [ 4]  401 	add	a, c
+      0001F4 F8 08            [12]  402 	ldhl	sp,	#8
+                                    403 ;BTW.c:81: UINT8 twee = getTiental(een) + getHonderdtal(v) + getTiental(vv) + getEenheid(vvv);
+      0001F6 77               [ 8]  404 	ld	(hl), a
+      0001F7 CDr6Dr01         [24]  405 	call	_getTiental
+      0001FA 4F               [ 4]  406 	ld	c, a
+      0001FB C5               [16]  407 	push	bc
+      0001FC F8 07            [12]  408 	ldhl	sp,	#7
+      0001FE 7E               [ 8]  409 	ld	a, (hl)
+      0001FF CDr80r01         [24]  410 	call	_getHonderdtal
+      000202 C1               [12]  411 	pop	bc
+      000203 81               [ 4]  412 	add	a, c
+      000204 4F               [ 4]  413 	ld	c, a
+      000205 C5               [16]  414 	push	bc
+      000206 F8 08            [12]  415 	ldhl	sp,	#8
+      000208 7E               [ 8]  416 	ld	a, (hl)
+      000209 CDr6Dr01         [24]  417 	call	_getTiental
+      00020C C1               [12]  418 	pop	bc
+      00020D 81               [ 4]  419 	add	a, c
+      00020E 4F               [ 4]  420 	ld	c, a
+      00020F C5               [16]  421 	push	bc
+      000210 F8 09            [12]  422 	ldhl	sp,	#9
+      000212 7E               [ 8]  423 	ld	a, (hl)
+      000213 CDr62r01         [24]  424 	call	_getEenheid
+      000216 C1               [12]  425 	pop	bc
+      000217 81               [ 4]  426 	add	a, c
+      000218 F8 09            [12]  427 	ldhl	sp,	#9
+                                    428 ;BTW.c:82: UINT8 drie = getTiental(twee) + getHonderdtal(vv) + getTiental(vvv);
+      00021A 77               [ 8]  429 	ld	(hl), a
+      00021B CDr6Dr01         [24]  430 	call	_getTiental
+      00021E 4F               [ 4]  431 	ld	c, a
+      00021F C5               [16]  432 	push	bc
+      000220 F8 08            [12]  433 	ldhl	sp,	#8
+      000222 7E               [ 8]  434 	ld	a, (hl)
+      000223 CDr80r01         [24]  435 	call	_getHonderdtal
+      000226 C1               [12]  436 	pop	bc
+      000227 81               [ 4]  437 	add	a, c
+      000228 4F               [ 4]  438 	ld	c, a
+      000229 C5               [16]  439 	push	bc
+      00022A F8 09            [12]  440 	ldhl	sp,	#9
+      00022C 7E               [ 8]  441 	ld	a, (hl)
+      00022D CDr6Dr01         [24]  442 	call	_getTiental
+      000230 C1               [12]  443 	pop	bc
+      000231 81               [ 4]  444 	add	a, c
+      000232 57               [ 4]  445 	ld	d, a
+                                    446 ;BTW.c:83: UINT8 vier = getTiental(drie) + getHonderdtal(vvv);
+      000233 D5               [16]  447 	push	de
+      000234 7A               [ 4]  448 	ld	a, d
+      000235 CDr6Dr01         [24]  449 	call	_getTiental
+      000238 5F               [ 4]  450 	ld	e, a
+      000239 F1               [12]  451 	pop	af
+      00023A 57               [ 4]  452 	ld	d, a
+      00023B D5               [16]  453 	push	de
+      00023C F8 09            [12]  454 	ldhl	sp,	#9
+      00023E 7E               [ 8]  455 	ld	a, (hl)
+      00023F CDr80r01         [24]  456 	call	_getHonderdtal
+      000242 D1               [12]  457 	pop	de
+      000243 83               [ 4]  458 	add	a, e
+      000244 5F               [ 4]  459 	ld	e, a
+                                    460 ;BTW.c:85: printf("\n\n\n  %d % Percent BTW\n\n  %d Bedrag excl. \n____________________  \n  BTW bedrag %d%d%d,%d%d",b[s] ,j,vier,getEenheid(drie),getEenheid(twee),getEenheid(een),getEenheid(v));
+      000245 D5               [16]  461 	push	de
+      000246 F8 07            [12]  462 	ldhl	sp,	#7
+      000248 7E               [ 8]  463 	ld	a, (hl)
+      000249 CDr62r01         [24]  464 	call	_getEenheid
+      00024C D1               [12]  465 	pop	de
+      00024D F8 00            [12]  466 	ldhl	sp,	#0
+      00024F 22               [ 8]  467 	ld	(hl+), a
+      000250 36 00            [12]  468 	ld	(hl), #0x00
+      000252 D5               [16]  469 	push	de
+      000253 F8 0A            [12]  470 	ldhl	sp,	#10
+      000255 7E               [ 8]  471 	ld	a, (hl)
+      000256 CDr62r01         [24]  472 	call	_getEenheid
+      000259 D1               [12]  473 	pop	de
+      00025A F8 02            [12]  474 	ldhl	sp,	#2
+      00025C 22               [ 8]  475 	ld	(hl+), a
+      00025D 36 00            [12]  476 	ld	(hl), #0x00
+      00025F D5               [16]  477 	push	de
+      000260 F8 0B            [12]  478 	ldhl	sp,	#11
+      000262 7E               [ 8]  479 	ld	a, (hl)
+      000263 CDr62r01         [24]  480 	call	_getEenheid
+      000266 D1               [12]  481 	pop	de
+      000267 F8 04            [12]  482 	ldhl	sp,	#4
+      000269 22               [ 8]  483 	ld	(hl+), a
+      00026A 36 00            [12]  484 	ld	(hl), #0x00
+      00026C D5               [16]  485 	push	de
+      00026D 7A               [ 4]  486 	ld	a, d
+      00026E CDr62r01         [24]  487 	call	_getEenheid
+      000271 D1               [12]  488 	pop	de
+      000272 F8 06            [12]  489 	ldhl	sp,	#6
+      000274 22               [ 8]  490 	ld	(hl+), a
+      000275 36 00            [12]  491 	ld	(hl), #0x00
+      000277 56               [ 8]  492 	ld	d, (hl)
+      000278 FAr04r00         [16]  493 	ld	a, (#_j)
+      00027B F8 08            [12]  494 	ldhl	sp,	#8
+      00027D 22               [ 8]  495 	ld	(hl+), a
+      00027E 36 00            [12]  496 	ld	(hl), #0x00
+      000280 3Er01            [ 8]  497 	ld	a, #<(_b)
+      000282 21r00r00         [12]  498 	ld	hl, #_s
+      000285 86               [ 8]  499 	add	a, (hl)
+      000286 4F               [ 4]  500 	ld	c, a
+      000287 3Es00            [ 8]  501 	ld	a, #>(_b)
+      000289 CE 00            [ 8]  502 	adc	a, #0x00
+      00028B 47               [ 4]  503 	ld	b, a
+      00028C 0A               [ 8]  504 	ld	a, (bc)
+      00028D 4F               [ 4]  505 	ld	c, a
+      00028E 06 00            [ 8]  506 	ld	b, #0x00
+      000290 E1               [12]  507 	pop	hl
+      000291 E5               [16]  508 	push	hl
+      000292 E5               [16]  509 	push	hl
+      000293 F8 04            [12]  510 	ldhl	sp,	#4
+      000295 7E               [ 8]  511 	ld	a, (hl)
+      000296 26 00            [ 8]  512 	ld	h, #0x00
+                                    513 ;	spillPairReg hl
+                                    514 ;	spillPairReg hl
+      000298 6F               [ 4]  515 	ld	l, a
+                                    516 ;	spillPairReg hl
+                                    517 ;	spillPairReg hl
+      000299 E5               [16]  518 	push	hl
+      00029A F8 08            [12]  519 	ldhl	sp,	#8
+      00029C 7E               [ 8]  520 	ld	a, (hl)
+      00029D 26 00            [ 8]  521 	ld	h, #0x00
+                                    522 ;	spillPairReg hl
+                                    523 ;	spillPairReg hl
+      00029F 6F               [ 4]  524 	ld	l, a
+                                    525 ;	spillPairReg hl
+                                    526 ;	spillPairReg hl
+      0002A0 E5               [16]  527 	push	hl
+      0002A1 F8 0C            [12]  528 	ldhl	sp,	#12
+      0002A3 7E               [ 8]  529 	ld	a, (hl)
+      0002A4 26 00            [ 8]  530 	ld	h, #0x00
+                                    531 ;	spillPairReg hl
+                                    532 ;	spillPairReg hl
+      0002A6 6F               [ 4]  533 	ld	l, a
+                                    534 ;	spillPairReg hl
+                                    535 ;	spillPairReg hl
+      0002A7 E5               [16]  536 	push	hl
+      0002A8 D5               [16]  537 	push	de
+      0002A9 F8 12            [12]  538 	ldhl	sp,	#18
+      0002AB 5E               [ 8]  539 	ld	e, (hl)
+      0002AC 16 00            [ 8]  540 	ld	d, #0x00
+      0002AE D5               [16]  541 	push	de
+      0002AF C5               [16]  542 	push	bc
+      0002B0 11rD9r02         [12]  543 	ld	de, #___str_9
+      0002B3 D5               [16]  544 	push	de
+      0002B4 CDr00r00         [24]  545 	call	_printf
+      0002B7 E8 10            [16]  546 	add	sp, #16
+                                    547 ;BTW.c:86: printf("\n\n\n\n\n\n--------------------");
+      0002B9 11r33r03         [12]  548 	ld	de, #___str_10
+      0002BC D5               [16]  549 	push	de
+      0002BD CDr00r00         [24]  550 	call	_printf
+      0002C0 E1               [12]  551 	pop	hl
+                                    552 ;BTW.c:87: }
+      0002C1 E8 0A            [16]  553 	add	sp, #10
+      0002C3 C9               [16]  554 	ret
+      0002C4                        555 ___str_8:
+      0002C4 2D 2D 2D 2D 2D 2D 2D   556 	.ascii "--------------------"
+             2D 2D 2D 2D 2D 2D 2D
+             2D 2D 2D 2D 2D 2D
+      0002D8 00                     557 	.db 0x00
+      0002D9                        558 ___str_9:
+      0002D9 0A                     559 	.db 0x0a
+      0002DA 0A                     560 	.db 0x0a
+      0002DB 0A                     561 	.db 0x0a
+      0002DC 20 20 25 64 20 25 20   562 	.ascii "  %d % Percent BTW"
+             50 65 72 63 65 6E 74
+             20 42 54 57
+      0002EE 0A                     563 	.db 0x0a
+      0002EF 0A                     564 	.db 0x0a
+      0002F0 20 20 25 64 20 42 65   565 	.ascii "  %d Bedrag excl. "
+             64 72 61 67 20 65 78
+             63 6C 2E 20
+      000302 0A                     566 	.db 0x0a
+      000303 5F 5F 5F 5F 5F 5F 5F   567 	.ascii "____________________  "
+             5F 5F 5F 5F 5F 5F 5F
+             5F 5F 5F 5F 5F 5F 20
+             20
+      000319 0A                     568 	.db 0x0a
+      00031A 20 20 42 54 57 20 62   569 	.ascii "  BTW bedrag %d%d%d,%d%d"
+             65 64 72 61 67 20 25
+             64 25 64 25 64 2C 25
+             64 25 64
+      000332 00                     570 	.db 0x00
+      000333                        571 ___str_10:
+      000333 0A                     572 	.db 0x0a
+      000334 0A                     573 	.db 0x0a
+      000335 0A                     574 	.db 0x0a
+      000336 0A                     575 	.db 0x0a
+      000337 0A                     576 	.db 0x0a
+      000338 0A                     577 	.db 0x0a
+      000339 2D 2D 2D 2D 2D 2D 2D   578 	.ascii "--------------------"
+             2D 2D 2D 2D 2D 2D 2D
+             2D 2D 2D 2D 2D 2D
+      00034D 00                     579 	.db 0x00
+                                    580 ;Currency.c:6: void currencyScreen(){
+                                    581 ;	---------------------------------
+                                    582 ; Function currencyScreen
+                                    583 ; ---------------------------------
+      00034E                        584 _currencyScreen::
+                                    585 ;Currency.c:7: printf("$$$$$$$$$$$$$$$$$$$$");
+      00034E 11r83r03         [12]  586 	ld	de, #___str_11
+      000351 D5               [16]  587 	push	de
+      000352 CDr00r00         [24]  588 	call	_printf
+      000355 E1               [12]  589 	pop	hl
+                                    590 ;Currency.c:8: printf("\n\n");
+      000356 11r98r03         [12]  591 	ld	de, #___str_13
+      000359 CDr00r00         [24]  592 	call	_puts
+                                    593 ;Currency.c:9: printf("   Amount to \n   Convert: %d", amount);
+      00035C 21r06r00         [12]  594 	ld	hl, #_amount
+      00035F 4E               [ 8]  595 	ld	c, (hl)
+      000360 06 00            [ 8]  596 	ld	b, #0x00
+      000362 C5               [16]  597 	push	bc
+      000363 11r9Ar03         [12]  598 	ld	de, #___str_14
+      000366 D5               [16]  599 	push	de
+      000367 CDr00r00         [24]  600 	call	_printf
+      00036A E8 04            [16]  601 	add	sp, #4
+                                    602 ;Currency.c:10: printf("\n\n");
+      00036C 11r98r03         [12]  603 	ld	de, #___str_13
+      00036F CDr00r00         [24]  604 	call	_puts
+                                    605 ;Currency.c:11: printf(" ");
+      000372 11rB7r03         [12]  606 	ld	de, #___str_16
+      000375 D5               [16]  607 	push	de
+      000376 CDr00r00         [24]  608 	call	_printf
+      000379 E1               [12]  609 	pop	hl
+                                    610 ;Currency.c:12: printf("\n\n\n\n\n Made By\n\n  Emre Ayar\n  Speedysm1des\n\n$$$$$$$$$$$$$$$$$$$$");
+      00037A 11rB9r03         [12]  611 	ld	de, #___str_17
+      00037D D5               [16]  612 	push	de
+      00037E CDr00r00         [24]  613 	call	_printf
+      000381 E1               [12]  614 	pop	hl
+                                    615 ;Currency.c:13: }
+      000382 C9               [16]  616 	ret
+      000383                        617 ___str_11:
+      000383 24 24 24 24 24 24 24   618 	.ascii "$$$$$$$$$$$$$$$$$$$$"
+             24 24 24 24 24 24 24
+             24 24 24 24 24 24
+      000397 00                     619 	.db 0x00
+      000398                        620 ___str_13:
+      000398 0A                     621 	.db 0x0a
+      000399 00                     622 	.db 0x00
+      00039A                        623 ___str_14:
+      00039A 20 20 20 41 6D 6F 75   624 	.ascii "   Amount to "
+             6E 74 20 74 6F 20
+      0003A7 0A                     625 	.db 0x0a
+      0003A8 20 20 20 43 6F 6E 76   626 	.ascii "   Convert: %d"
+             65 72 74 3A 20 25 64
+      0003B6 00                     627 	.db 0x00
+      0003B7                        628 ___str_16:
+      0003B7 20                     629 	.ascii " "
+      0003B8 00                     630 	.db 0x00
+      0003B9                        631 ___str_17:
+      0003B9 0A                     632 	.db 0x0a
+      0003BA 0A                     633 	.db 0x0a
+      0003BB 0A                     634 	.db 0x0a
+      0003BC 0A                     635 	.db 0x0a
+      0003BD 0A                     636 	.db 0x0a
+      0003BE 20 4D 61 64 65 20 42   637 	.ascii " Made By"
+             79
+      0003C6 0A                     638 	.db 0x0a
+      0003C7 0A                     639 	.db 0x0a
+      0003C8 20 20 45 6D 72 65 20   640 	.ascii "  Emre Ayar"
+             41 79 61 72
+      0003D3 0A                     641 	.db 0x0a
+      0003D4 20 20 53 70 65 65 64   642 	.ascii "  Speedysm1des"
+             79 73 6D 31 64 65 73
+      0003E2 0A                     643 	.db 0x0a
+      0003E3 0A                     644 	.db 0x0a
+      0003E4 24 24 24 24 24 24 24   645 	.ascii "$$$$$$$$$$$$$$$$$$$$"
+             24 24 24 24 24 24 24
+             24 24 24 24 24 24
+      0003F8 00                     646 	.db 0x00
+                                    647 ;Currency.c:14: void currencyJoy(){
+                                    648 ;	---------------------------------
+                                    649 ; Function currencyJoy
+                                    650 ; ---------------------------------
+      0003F9                        651 _currencyJoy::
+                                    652 ;Currency.c:15: if (J_DOWN & joypad()) {
+      0003F9 CDr00r00         [24]  653 	call	_joypad
+      0003FC CB 5F            [ 8]  654 	bit	3, a
+      0003FE 28 0C            [12]  655 	jr	Z, 00104$
+                                    656 ;Currency.c:16: amount--;
+      000400 21r06r00         [12]  657 	ld	hl, #_amount
+      000403 35               [12]  658 	dec	(hl)
+                                    659 ;Currency.c:17: cls();
+      000404 CDr00r00         [24]  660 	call	_cls
+                                    661 ;Currency.c:18: currencyScreen();
+      000407 CDr4Er03         [24]  662 	call	_currencyScreen
+      00040A 18 11            [12]  663 	jr	00105$
+      00040C                        664 00104$:
+                                    665 ;Currency.c:20: else if (J_UP & joypad()) {
+      00040C CDr00r00         [24]  666 	call	_joypad
+      00040F CB 57            [ 8]  667 	bit	2, a
+      000411 28 0A            [12]  668 	jr	Z, 00105$
+                                    669 ;Currency.c:21: amount++;
+      000413 21r06r00         [12]  670 	ld	hl, #_amount
+      000416 34               [12]  671 	inc	(hl)
+                                    672 ;Currency.c:22: cls();
+      000417 CDr00r00         [24]  673 	call	_cls
+                                    674 ;Currency.c:23: currencyScreen();
+      00041A CDr4Er03         [24]  675 	call	_currencyScreen
+      00041D                        676 00105$:
+                                    677 ;Currency.c:25: delay(500);
+      00041D 11 F4 01         [12]  678 	ld	de, #0x01f4
+                                    679 ;Currency.c:26: }
+      000420 C3r00r00         [16]  680 	jp	_delay
+                                    681 ;TIMER.c:8: void timerScreen(){
+                                    682 ;	---------------------------------
+                                    683 ; Function timerScreen
+                                    684 ; ---------------------------------
+      000423                        685 _timerScreen::
+      000423 3B               [ 8]  686 	dec	sp
+      000424 3B               [ 8]  687 	dec	sp
+                                    688 ;TIMER.c:11: printf("--------------------");
+      000425 11r67r04         [12]  689 	ld	de, #___str_18
+      000428 D5               [16]  690 	push	de
+      000429 CDr00r00         [24]  691 	call	_printf
+      00042C E1               [12]  692 	pop	hl
+                                    693 ;TIMER.c:12: printf("\n\n");
+      00042D 11r7Cr04         [12]  694 	ld	de, #___str_20
+      000430 CDr00r00         [24]  695 	call	_puts
+                                    696 ;TIMER.c:13: printf("   Seconds: %d\n   Minutes: %d\n   Uren: %d\n\n\n  A: Stop\n  B: Reset" , r[0], r[1], r[2]);
+      000433 FAr09r00         [16]  697 	ld	a, (#(_r + 2) + 0)
+      000436 4F               [ 4]  698 	ld	c, a
+      000437 06 00            [ 8]  699 	ld	b, #0x00
+      000439 FAr08r00         [16]  700 	ld	a, (#(_r + 1) + 0)
+      00043C F8 00            [12]  701 	ldhl	sp,	#0
+      00043E 22               [ 8]  702 	ld	(hl+), a
+      00043F AF               [ 4]  703 	xor	a, a
+      000440 32               [ 8]  704 	ld	(hl-), a
+      000441 FAr07r00         [16]  705 	ld	a, (#_r + 0)
+      000444 5F               [ 4]  706 	ld	e, a
+      000445 16 00            [ 8]  707 	ld	d, #0x00
+      000447 C5               [16]  708 	push	bc
+      000448 4E               [ 8]  709 	ld	c, (hl)
+      000449 06 00            [ 8]  710 	ld	b, #0x00
+      00044B C5               [16]  711 	push	bc
+      00044C D5               [16]  712 	push	de
+      00044D 11r7Er04         [12]  713 	ld	de, #___str_21
+      000450 D5               [16]  714 	push	de
+      000451 CDr00r00         [24]  715 	call	_printf
+      000454 E8 08            [16]  716 	add	sp, #8
+                                    717 ;TIMER.c:14: printf("\n\n\n");
+      000456 11rBFr04         [12]  718 	ld	de, #___str_23
+      000459 CDr00r00         [24]  719 	call	_puts
+                                    720 ;TIMER.c:15: printf(" Made By\n\n  Emre Ayar\n  Speedysm1des\n--------------------");
+      00045C 11rC2r04         [12]  721 	ld	de, #___str_24
+      00045F D5               [16]  722 	push	de
+      000460 CDr00r00         [24]  723 	call	_printf
+      000463 E1               [12]  724 	pop	hl
+                                    725 ;TIMER.c:16: }
+      000464 33               [ 8]  726 	inc	sp
+      000465 33               [ 8]  727 	inc	sp
+      000466 C9               [16]  728 	ret
+      000467                        729 ___str_18:
+      000467 2D 2D 2D 2D 2D 2D 2D   730 	.ascii "--------------------"
+             2D 2D 2D 2D 2D 2D 2D
+             2D 2D 2D 2D 2D 2D
+      00047B 00                     731 	.db 0x00
+      00047C                        732 ___str_20:
+      00047C 0A                     733 	.db 0x0a
+      00047D 00                     734 	.db 0x00
+      00047E                        735 ___str_21:
+      00047E 20 20 20 53 65 63 6F   736 	.ascii "   Seconds: %d"
+             6E 64 73 3A 20 25 64
+      00048C 0A                     737 	.db 0x0a
+      00048D 20 20 20 4D 69 6E 75   738 	.ascii "   Minutes: %d"
+             74 65 73 3A 20 25 64
+      00049B 0A                     739 	.db 0x0a
+      00049C 20 20 20 55 72 65 6E   740 	.ascii "   Uren: %d"
+             3A 20 25 64
+      0004A7 0A                     741 	.db 0x0a
+      0004A8 0A                     742 	.db 0x0a
+      0004A9 0A                     743 	.db 0x0a
+      0004AA 20 20 41 3A 20 53 74   744 	.ascii "  A: Stop"
+             6F 70
+      0004B3 0A                     745 	.db 0x0a
+      0004B4 20 20 42 3A 20 52 65   746 	.ascii "  B: Reset"
+             73 65 74
+      0004BE 00                     747 	.db 0x00
+      0004BF                        748 ___str_23:
+      0004BF 0A                     749 	.db 0x0a
+      0004C0 0A                     750 	.db 0x0a
+      0004C1 00                     751 	.db 0x00
+      0004C2                        752 ___str_24:
+      0004C2 20 4D 61 64 65 20 42   753 	.ascii " Made By"
+             79
+      0004CA 0A                     754 	.db 0x0a
+      0004CB 0A                     755 	.db 0x0a
+      0004CC 20 20 45 6D 72 65 20   756 	.ascii "  Emre Ayar"
+             41 79 61 72
+      0004D7 0A                     757 	.db 0x0a
+      0004D8 20 20 53 70 65 65 64   758 	.ascii "  Speedysm1des"
+             79 73 6D 31 64 65 73
+      0004E6 0A                     759 	.db 0x0a
+      0004E7 2D 2D 2D 2D 2D 2D 2D   760 	.ascii "--------------------"
+             2D 2D 2D 2D 2D 2D 2D
+             2D 2D 2D 2D 2D 2D
+      0004FB 00                     761 	.db 0x00
+                                    762 ;TIMER.c:17: void timerJoy(){
+                                    763 ;	---------------------------------
+                                    764 ; Function timerJoy
+                                    765 ; ---------------------------------
+      0004FC                        766 _timerJoy::
+                                    767 ;TIMER.c:18: if (J_A & joypad()) {
+      0004FC CDr00r00         [24]  768 	call	_joypad
+      0004FF CB 67            [ 8]  769 	bit	4, a
+      000501 28 0E            [12]  770 	jr	Z, 00102$
+                                    771 ;TIMER.c:19: r[0] = 0x0;
+      000503 01r07r00         [12]  772 	ld	bc, #_r+0
+      000506 AF               [ 4]  773 	xor	a, a
+      000507 02               [ 8]  774 	ld	(bc), a
+                                    775 ;TIMER.c:20: r[1] = 0x0;
+      000508 21r08r00         [12]  776 	ld	hl, #(_r + 1)
+      00050B 36 00            [12]  777 	ld	(hl), #0x00
+                                    778 ;TIMER.c:21: r[2] = 0x0;
+      00050D 03               [ 8]  779 	inc	bc
+      00050E 03               [ 8]  780 	inc	bc
+      00050F AF               [ 4]  781 	xor	a, a
+      000510 02               [ 8]  782 	ld	(bc), a
+      000511                        783 00102$:
+                                    784 ;TIMER.c:23: if (J_B & joypad()) {
+      000511 CDr00r00         [24]  785 	call	_joypad
+      000514 CB 6F            [ 8]  786 	bit	5, a
+      000516 28 06            [12]  787 	jr	Z, 00106$
+                                    788 ;TIMER.c:24: stopCount++;
+      000518 21r0Br00         [12]  789 	ld	hl, #_stopCount
+      00051B 34               [12]  790 	inc	(hl)
+      00051C 18 1A            [12]  791 	jr	00107$
+      00051E                        792 00106$:
+                                    793 ;TIMER.c:26: else if (J_START & joypad()) {
+      00051E CDr00r00         [24]  794 	call	_joypad
+      000521 07               [ 4]  795 	rlca
+      000522 30 14            [12]  796 	jr	NC, 00107$
+                                    797 ;TIMER.c:27: saveTimer[0] = r[0];
+      000524 01r00r00         [12]  798 	ld	bc, #_saveTimer+0
+      000527 FAr07r00         [16]  799 	ld	a, (#_r + 0)
+      00052A 02               [ 8]  800 	ld	(bc), a
+                                    801 ;TIMER.c:28: saveTimer[1] = r[1];
+      00052B FAr08r00         [16]  802 	ld	a, (#(_r + 1) + 0)
+      00052E 21r01r00         [12]  803 	ld	hl, #(_saveTimer + 1)
+      000531 77               [ 8]  804 	ld	(hl), a
+                                    805 ;TIMER.c:29: saveTimer[2] = r[2];
+      000532 03               [ 8]  806 	inc	bc
+      000533 03               [ 8]  807 	inc	bc
+      000534 FAr09r00         [16]  808 	ld	a, (#(_r + 2) + 0)
+      000537 02               [ 8]  809 	ld	(bc), a
+      000538                        810 00107$:
+                                    811 ;TIMER.c:31: cls();
+      000538 CDr00r00         [24]  812 	call	_cls
+                                    813 ;TIMER.c:32: if (stopCount % 2 == 0) {
+      00053B E5               [16]  814 	push	hl
+      00053C 21r0Br00         [12]  815 	ld	hl, #_stopCount
+      00053F CB 46            [12]  816 	bit	0, (hl)
+      000541 E1               [12]  817 	pop	hl
+      000542 20 03            [12]  818 	jr	NZ, 00109$
+                                    819 ;TIMER.c:33: timerSystem();
+      000544 CDr50r05         [24]  820 	call	_timerSystem
+      000547                        821 00109$:
+                                    822 ;TIMER.c:35: timerScreen();
+      000547 CDr23r04         [24]  823 	call	_timerScreen
+                                    824 ;TIMER.c:36: delay(1000);
+      00054A 11 E8 03         [12]  825 	ld	de, #0x03e8
+                                    826 ;TIMER.c:37: }
+      00054D C3r00r00         [16]  827 	jp	_delay
+                                    828 ;TIMER.c:38: UINT8* timerSystem(){
+                                    829 ;	---------------------------------
+                                    830 ; Function timerSystem
+                                    831 ; ---------------------------------
+      000550                        832 _timerSystem::
+                                    833 ;TIMER.c:39: r[0]++;
+      000550 FAr07r00         [16]  834 	ld	a, (#_r + 0)
+      000553 4F               [ 4]  835 	ld	c, a
+      000554 0C               [ 4]  836 	inc	c
+      000555 21r07r00         [12]  837 	ld	hl, #_r
+      000558 71               [ 8]  838 	ld	(hl), c
+                                    839 ;TIMER.c:40: NR10_REG = 00010011;
+      000559 3E 09            [ 8]  840 	ld	a, #0x09
+      00055B E0r00            [12]  841 	ldh	(_NR10_REG + 0), a
+                                    842 ;TIMER.c:41: NR11_REG = 0x40;
+      00055D 3E 40            [ 8]  843 	ld	a, #0x40
+      00055F E0r00            [12]  844 	ldh	(_NR11_REG + 0), a
+                                    845 ;TIMER.c:42: NR12_REG = 0x73;
+      000561 3E 73            [ 8]  846 	ld	a, #0x73
+      000563 E0r00            [12]  847 	ldh	(_NR12_REG + 0), a
+                                    848 ;TIMER.c:43: NR13_REG = 0x00;
+      000565 AF               [ 4]  849 	xor	a, a
+      000566 E0r00            [12]  850 	ldh	(_NR13_REG + 0), a
+                                    851 ;TIMER.c:44: NR14_REG = 0xC3;
+      000568 3E C3            [ 8]  852 	ld	a, #0xc3
+      00056A E0r00            [12]  853 	ldh	(_NR14_REG + 0), a
+                                    854 ;TIMER.c:45: if (r[0x0] % 60 == 0) {
+      00056C 59               [ 4]  855 	ld	e, c
+      00056D 16 00            [ 8]  856 	ld	d, #0x00
+      00056F 01 3C 00         [12]  857 	ld	bc, #0x003c
+      000572 CDr00r00         [24]  858 	call	__modsint
+      000575 78               [ 4]  859 	ld	a, b
+      000576 B1               [ 4]  860 	or	a, c
+      000577 20 27            [12]  861 	jr	NZ, 00104$
+                                    862 ;TIMER.c:46: r[0x1]++;
+      000579 FAr08r00         [16]  863 	ld	a, (#(_r + 1) + 0)
+      00057C 3C               [ 4]  864 	inc	a
+      00057D EAr08r00         [16]  865 	ld	(#(_r + 1)),a
+                                    866 ;TIMER.c:47: r[0x0] = 0;
+      000580 21r07r00         [12]  867 	ld	hl, #_r
+      000583 36 00            [12]  868 	ld	(hl), #0x00
+                                    869 ;TIMER.c:48: if (r[0x1] % 60 == 0) {
+      000585 FAr08r00         [16]  870 	ld	a, (#(_r + 1) + 0)
+      000588 5F               [ 4]  871 	ld	e, a
+      000589 16 00            [ 8]  872 	ld	d, #0x00
+      00058B 01 3C 00         [12]  873 	ld	bc, #0x003c
+      00058E CDr00r00         [24]  874 	call	__modsint
+      000591 78               [ 4]  875 	ld	a, b
+      000592 B1               [ 4]  876 	or	a, c
+      000593 20 0B            [12]  877 	jr	NZ, 00104$
+                                    878 ;TIMER.c:49: r[0x1] = 0;
+      000595 21r08r00         [12]  879 	ld	hl, #(_r + 1)
+      000598 36 00            [12]  880 	ld	(hl), #0x00
+                                    881 ;TIMER.c:50: r[0x2]++;
+      00059A 01r09r00         [12]  882 	ld	bc, #_r + 2
+      00059D 0A               [ 8]  883 	ld	a, (bc)
+      00059E 3C               [ 4]  884 	inc	a
+      00059F 02               [ 8]  885 	ld	(bc), a
+      0005A0                        886 00104$:
+                                    887 ;TIMER.c:57: return 0;
+      0005A0 01 00 00         [12]  888 	ld	bc, #0x0000
+                                    889 ;TIMER.c:58: }
+      0005A3 C9               [16]  890 	ret
+                                    891 ;main.c:17: void selectionScreen(UINT8 S){
+                                    892 ;	---------------------------------
+                                    893 ; Function selectionScreen
+                                    894 ; ---------------------------------
+      0005A4                        895 _selectionScreen::
+      0005A4 5F               [ 4]  896 	ld	e, a
+                                    897 ;main.c:18: printf("--------------------");
+      0005A5 D5               [16]  898 	push	de
+      0005A6 01rDCr05         [12]  899 	ld	bc, #___str_25
+      0005A9 C5               [16]  900 	push	bc
+      0005AA CDr00r00         [24]  901 	call	_printf
+      0005AD E1               [12]  902 	pop	hl
+      0005AE 11rF1r05         [12]  903 	ld	de, #___str_27
+      0005B1 CDr00r00         [24]  904 	call	_puts
+      0005B4 D1               [12]  905 	pop	de
+                                    906 ;main.c:20: printf("Select Program:\n\n\n %s", SS[S+1]);
+      0005B5 01r0Cr01         [12]  907 	ld	bc, #_SS+0
+      0005B8 1C               [ 4]  908 	inc	e
+      0005B9 7B               [ 4]  909 	ld	a, e
+      0005BA 07               [ 4]  910 	rlca
+      0005BB 9F               [ 4]  911 	sbc	a, a
+      0005BC 6B               [ 4]  912 	ld	l, e
+      0005BD 67               [ 4]  913 	ld	h, a
+      0005BE 29               [ 8]  914 	add	hl, hl
+      0005BF 09               [ 8]  915 	add	hl, bc
+      0005C0 2A               [ 8]  916 	ld	a, (hl+)
+      0005C1 4F               [ 4]  917 	ld	c, a
+      0005C2 46               [ 8]  918 	ld	b, (hl)
+      0005C3 C5               [16]  919 	push	bc
+      0005C4 11rF3r05         [12]  920 	ld	de, #___str_28
+      0005C7 D5               [16]  921 	push	de
+      0005C8 CDr00r00         [24]  922 	call	_printf
+      0005CB E8 04            [16]  923 	add	sp, #4
+                                    924 ;main.c:21: printf("\n\n\n");
+      0005CD 11r09r06         [12]  925 	ld	de, #___str_30
+      0005D0 CDr00r00         [24]  926 	call	_puts
+                                    927 ;main.c:22: printf("\n\n\n\n\n--------------------");
+      0005D3 11r0Cr06         [12]  928 	ld	de, #___str_31
+      0005D6 D5               [16]  929 	push	de
+      0005D7 CDr00r00         [24]  930 	call	_printf
+      0005DA E1               [12]  931 	pop	hl
+                                    932 ;main.c:23: }
+      0005DB C9               [16]  933 	ret
+      0005DC                        934 ___str_25:
+      0005DC 2D 2D 2D 2D 2D 2D 2D   935 	.ascii "--------------------"
+             2D 2D 2D 2D 2D 2D 2D
+             2D 2D 2D 2D 2D 2D
+      0005F0 00                     936 	.db 0x00
+      0005F1                        937 ___str_27:
+      0005F1 0A                     938 	.db 0x0a
+      0005F2 00                     939 	.db 0x00
+      0005F3                        940 ___str_28:
+      0005F3 53 65 6C 65 63 74 20   941 	.ascii "Select Program:"
+             50 72 6F 67 72 61 6D
+             3A
+      000602 0A                     942 	.db 0x0a
+      000603 0A                     943 	.db 0x0a
+      000604 0A                     944 	.db 0x0a
+      000605 20 25 73               945 	.ascii " %s"
+      000608 00                     946 	.db 0x00
+      000609                        947 ___str_30:
+      000609 0A                     948 	.db 0x0a
+      00060A 0A                     949 	.db 0x0a
+      00060B 00                     950 	.db 0x00
+      00060C                        951 ___str_31:
+      00060C 0A                     952 	.db 0x0a
+      00060D 0A                     953 	.db 0x0a
+      00060E 0A                     954 	.db 0x0a
+      00060F 0A                     955 	.db 0x0a
+      000610 0A                     956 	.db 0x0a
+      000611 2D 2D 2D 2D 2D 2D 2D   957 	.ascii "--------------------"
+             2D 2D 2D 2D 2D 2D 2D
+             2D 2D 2D 2D 2D 2D
+      000625 00                     958 	.db 0x00
+                                    959 ;main.c:24: void main(){
+                                    960 ;	---------------------------------
+                                    961 ; Function main
+                                    962 ; ---------------------------------
+      000626                        963 _main::
+      000626 E8 F9            [16]  964 	add	sp, #-7
+                                    965 ;main.c:25: NR52_REG = 0x80;// sound on
+      000628 3E 80            [ 8]  966 	ld	a, #0x80
+      00062A E0r00            [12]  967 	ldh	(_NR52_REG + 0), a
+                                    968 ;main.c:26: NR50_REG = 0x07;// volume set
+      00062C 3E 07            [ 8]  969 	ld	a, #0x07
+      00062E E0r00            [12]  970 	ldh	(_NR50_REG + 0), a
+                                    971 ;main.c:27: NR51_REG = 0xFF;
+      000630 3E FF            [ 8]  972 	ld	a, #0xff
+      000632 E0r00            [12]  973 	ldh	(_NR51_REG + 0), a
+                                    974 ;main.c:28: ENABLE_RAM_MBC1;
+      000634 21r00r00         [12]  975 	ld	hl, #_rRAMG
+      000637 36 0A            [12]  976 	ld	(hl), #0x0a
+                                    977 ;main.c:37: bool sele = false;
+      000639 F8 00            [12]  978 	ldhl	sp,	#0
+      00063B 36 00            [12]  979 	ld	(hl), #0x00
+                                    980 ;main.c:38: short S = 0;
+      00063D AF               [ 4]  981 	xor	a, a
+      00063E F8 05            [12]  982 	ldhl	sp,	#5
+      000640 22               [ 8]  983 	ld	(hl+), a
+      000641 77               [ 8]  984 	ld	(hl), a
+                                    985 ;main.c:41: if (saveTimer[0] != 0xFF) {
+      000642 FAr00r00         [16]  986 	ld	a, (#_saveTimer + 0)
+      000645 F8 04            [12]  987 	ldhl	sp,#4
+      000647 77               [ 8]  988 	ld	(hl), a
+      000648 7E               [ 8]  989 	ld	a, (hl)
+      000649 3C               [ 4]  990 	inc	a
+      00064A 28 15            [12]  991 	jr	Z, 00102$
+                                    992 ;main.c:42: r[0] = saveTimer[0];
+      00064C 01r07r00         [12]  993 	ld	bc, #_r+0
+      00064F F8 04            [12]  994 	ldhl	sp,	#4
+      000651 7E               [ 8]  995 	ld	a, (hl)
+      000652 02               [ 8]  996 	ld	(bc), a
+                                    997 ;main.c:43: r[1] = saveTimer[1];
+      000653 FAr01r00         [16]  998 	ld	a, (#(_saveTimer + 1) + 0)
+      000656 EAr08r00         [16]  999 	ld	(#(_r + 1)),a
+                                   1000 ;main.c:44: r[2] = saveTimer[2];
+      000659 03               [ 8] 1001 	inc	bc
+      00065A 03               [ 8] 1002 	inc	bc
+      00065B FAr02r00         [16] 1003 	ld	a, (#(_saveTimer + 2) + 0)
+      00065E 02               [ 8] 1004 	ld	(bc), a
+      00065F 18 0F            [12] 1005 	jr	00103$
+      000661                       1006 00102$:
+                                   1007 ;main.c:48: r[0] = 0x0;
+      000661 21r07r00         [12] 1008 	ld	hl, #_r
+      000664 36 00            [12] 1009 	ld	(hl), #0x00
+                                   1010 ;main.c:49: r[1] = 0x0;
+      000666 21r08r00         [12] 1011 	ld	hl, #(_r + 1)
+      000669 36 00            [12] 1012 	ld	(hl), #0x00
+                                   1013 ;main.c:50: r[2] = 0x0;
+      00066B 21r09r00         [12] 1014 	ld	hl, #(_r + 2)
+      00066E 36 00            [12] 1015 	ld	(hl), #0x00
+      000670                       1016 00103$:
+                                   1017 ;main.c:52: selectionScreen(S);
+      000670 AF               [ 4] 1018 	xor	a, a
+      000671 CDrA4r05         [24] 1019 	call	_selectionScreen
+                                   1020 ;main.c:53: set_sprite_data(0, 1, TileLabel);
+      000674 11r0Cr00         [12] 1021 	ld	de, #_TileLabel
+      000677 D5               [16] 1022 	push	de
+      000678 AF               [ 4] 1023 	xor	a, a
+      000679 3C               [ 4] 1024 	inc	a
+      00067A F5               [16] 1025 	push	af
+      00067B CDr00r00         [24] 1026 	call	_set_sprite_data
+      00067E E8 04            [16] 1027 	add	sp, #4
+                                   1028 ;c:\gbdk\include\gb\gb.h:1804: shadow_OAM[nb].tile=tile;
+      000680 21r02r00         [12] 1029 	ld	hl, #(_shadow_OAM + 2)
+      000683 36 00            [12] 1030 	ld	(hl), #0x00
+                                   1031 ;c:\gbdk\include\gb\gb.h:1877: OAM_item_t * itm = &shadow_OAM[nb];
+      000685 21r00r00         [12] 1032 	ld	hl, #_shadow_OAM
+                                   1033 ;c:\gbdk\include\gb\gb.h:1878: itm->y=y, itm->x=x;
+      000688 3E 4E            [ 8] 1034 	ld	a, #0x4e
+      00068A 22               [ 8] 1035 	ld	(hl+), a
+      00068B 36 58            [12] 1036 	ld	(hl), #0x58
+                                   1037 ;c:\gbdk\include\gb\gb.h:1804: shadow_OAM[nb].tile=tile;
+      00068D 21r02r00         [12] 1038 	ld	hl, #(_shadow_OAM + 2)
+      000690 36 00            [12] 1039 	ld	(hl), #0x00
+                                   1040 ;main.c:60: while (!sele) {
+      000692                       1041 00122$:
+                                   1042 ;main.c:62: if (S < 2) {
+      000692 F8 05            [12] 1043 	ldhl	sp,	#5
+      000694 2A               [ 8] 1044 	ld	a, (hl+)
+      000695 4F               [ 4] 1045 	ld	c, a
+      000696 46               [ 8] 1046 	ld	b, (hl)
+                                   1047 ;main.c:78: if (S == 1) {
+      000697 79               [ 4] 1048 	ld	a, c
+      000698 3D               [ 4] 1049 	dec	a
+      000699 B0               [ 4] 1050 	or	a, b
+      00069A 3E 01            [ 8] 1051 	ld	a, #0x01
+      00069C 28 01            [12] 1052 	jr	Z, 00324$
+      00069E AF               [ 4] 1053 	xor	a, a
+      00069F                       1054 00324$:
+      00069F F8 01            [12] 1055 	ldhl	sp,	#1
+      0006A1 77               [ 8] 1056 	ld	(hl), a
+                                   1057 ;main.c:84: if (S == 2) {
+      0006A2 79               [ 4] 1058 	ld	a, c
+      0006A3 D6 02            [ 8] 1059 	sub	a, #0x02
+      0006A5 B0               [ 4] 1060 	or	a, b
+      0006A6 3E 01            [ 8] 1061 	ld	a, #0x01
+      0006A8 28 01            [12] 1062 	jr	Z, 00326$
+      0006AA AF               [ 4] 1063 	xor	a, a
+      0006AB                       1064 00326$:
+      0006AB F8 02            [12] 1065 	ldhl	sp,	#2
+                                   1066 ;main.c:60: while (!sele) {
+      0006AD 32               [ 8] 1067 	ld	(hl-), a
+      0006AE 2B               [ 8] 1068 	dec	hl
+      0006AF CB 46            [12] 1069 	bit	0, (hl)
+      0006B1 20 79            [12] 1070 	jr	NZ, 00143$
+                                   1071 ;main.c:61: if (J_RIGHT & joypad()) {
+      0006B3 CDr00r00         [24] 1072 	call	_joypad
+      0006B6 0F               [ 4] 1073 	rrca
+      0006B7 30 1D            [12] 1074 	jr	NC, 00120$
+                                   1075 ;main.c:62: if (S < 2) {
+      0006B9 79               [ 4] 1076 	ld	a, c
+      0006BA D6 02            [ 8] 1077 	sub	a, #0x02
+      0006BC 78               [ 4] 1078 	ld	a, b
+      0006BD 17               [ 4] 1079 	rla
+      0006BE 3F               [ 4] 1080 	ccf
+      0006BF 1F               [ 4] 1081 	rra
+      0006C0 DE 80            [ 8] 1082 	sbc	a, #0x80
+      0006C2 30 5F            [12] 1083 	jr	NC, 00121$
+                                   1084 ;main.c:63: S++;
+      0006C4 F8 05            [12] 1085 	ldhl	sp,	#5
+      0006C6 34               [12] 1086 	inc	(hl)
+      0006C7 20 02            [12] 1087 	jr	NZ, 00328$
+      0006C9 23               [ 8] 1088 	inc	hl
+      0006CA 34               [12] 1089 	inc	(hl)
+      0006CB                       1090 00328$:
+                                   1091 ;main.c:64: cls();
+      0006CB CDr00r00         [24] 1092 	call	_cls
+                                   1093 ;main.c:65: selectionScreen(S);
+      0006CE F8 05            [12] 1094 	ldhl	sp,	#5
+      0006D0 7E               [ 8] 1095 	ld	a, (hl)
+      0006D1 CDrA4r05         [24] 1096 	call	_selectionScreen
+      0006D4 18 4D            [12] 1097 	jr	00121$
+      0006D6                       1098 00120$:
+                                   1099 ;main.c:68: else if (J_LEFT & joypad()) {
+      0006D6 CDr00r00         [24] 1100 	call	_joypad
+      0006D9 CB 4F            [ 8] 1101 	bit	1, a
+      0006DB 28 19            [12] 1102 	jr	Z, 00117$
+                                   1103 ;main.c:69: if (S != 0) {
+      0006DD F8 06            [12] 1104 	ldhl	sp,	#6
+      0006DF 3A               [ 8] 1105 	ld	a, (hl-)
+      0006E0 B6               [ 8] 1106 	or	a, (hl)
+      0006E1 28 40            [12] 1107 	jr	Z, 00121$
+                                   1108 ;main.c:70: S--;
+      0006E3 5E               [ 8] 1109 	ld	e, (hl)
+      0006E4 23               [ 8] 1110 	inc	hl
+      0006E5 56               [ 8] 1111 	ld	d, (hl)
+      0006E6 2B               [ 8] 1112 	dec	hl
+      0006E7 1B               [ 8] 1113 	dec	de
+      0006E8 73               [ 8] 1114 	ld	(hl), e
+      0006E9 23               [ 8] 1115 	inc	hl
+      0006EA 72               [ 8] 1116 	ld	(hl), d
+                                   1117 ;main.c:71: cls();
+      0006EB CDr00r00         [24] 1118 	call	_cls
+                                   1119 ;main.c:72: selectionScreen(S);
+      0006EE F8 05            [12] 1120 	ldhl	sp,	#5
+      0006F0 7E               [ 8] 1121 	ld	a, (hl)
+      0006F1 CDrA4r05         [24] 1122 	call	_selectionScreen
+      0006F4 18 2D            [12] 1123 	jr	00121$
+      0006F6                       1124 00117$:
+                                   1125 ;main.c:75: else if (J_START & joypad()) {
+      0006F6 CDr00r00         [24] 1126 	call	_joypad
+      0006F9 07               [ 4] 1127 	rlca
+      0006FA 30 27            [12] 1128 	jr	NC, 00121$
+                                   1129 ;main.c:76: savefile = 0x2;
+      0006FC 21r00r00         [12] 1130 	ld	hl, #_savefile
+      0006FF 36 02            [12] 1131 	ld	(hl), #0x02
+                                   1132 ;main.c:77: cls();
+      000701 CDr00r00         [24] 1133 	call	_cls
+                                   1134 ;main.c:78: if (S == 1) {
+      000704 F8 01            [12] 1135 	ldhl	sp,	#1
+      000706 7E               [ 8] 1136 	ld	a, (hl)
+      000707 B7               [ 4] 1137 	or	a, a
+      000708 28 03            [12] 1138 	jr	Z, 00109$
+                                   1139 ;main.c:79: btwScreen();
+      00070A CDr00r00         [24] 1140 	call	_btwScreen
+      00070D                       1141 00109$:
+                                   1142 ;main.c:81: if (S == 0) {
+      00070D F8 06            [12] 1143 	ldhl	sp,	#6
+      00070F 3A               [ 8] 1144 	ld	a, (hl-)
+      000710 B6               [ 8] 1145 	or	a, (hl)
+      000711 20 03            [12] 1146 	jr	NZ, 00111$
+                                   1147 ;main.c:82: currencyScreen();
+      000713 CDr4Er03         [24] 1148 	call	_currencyScreen
+      000716                       1149 00111$:
+                                   1150 ;main.c:84: if (S == 2) {
+      000716 F8 02            [12] 1151 	ldhl	sp,	#2
+      000718 7E               [ 8] 1152 	ld	a, (hl)
+      000719 B7               [ 4] 1153 	or	a, a
+      00071A 28 03            [12] 1154 	jr	Z, 00113$
+                                   1155 ;main.c:85: timerScreen();
+      00071C CDr23r04         [24] 1156 	call	_timerScreen
+      00071F                       1157 00113$:
+                                   1158 ;main.c:87: sele = true;
+      00071F F8 00            [12] 1159 	ldhl	sp,	#0
+      000721 36 01            [12] 1160 	ld	(hl), #0x01
+      000723                       1161 00121$:
+                                   1162 ;main.c:89: delay(500);
+      000723 11 F4 01         [12] 1163 	ld	de, #0x01f4
+      000726 CDr00r00         [24] 1164 	call	_delay
+      000729 C3r92r06         [16] 1165 	jp	00122$
+                                   1166 ;main.c:91: while(sele){
+      00072C                       1167 00143$:
+      00072C F8 00            [12] 1168 	ldhl	sp,	#0
+      00072E CB 46            [12] 1169 	bit	0, (hl)
+      000730 28 77            [12] 1170 	jr	Z, 00145$
+                                   1171 ;main.c:92: while(S == 1 && sele) {
+      000732                       1172 00128$:
+                                   1173 ;main.c:65: selectionScreen(S);
+      000732 F8 05            [12] 1174 	ldhl	sp,	#5
+      000734 3A               [ 8] 1175 	ld	a, (hl-)
+      000735 2B               [ 8] 1176 	dec	hl
+                                   1177 ;main.c:92: while(S == 1 && sele) {
+      000736 32               [ 8] 1178 	ld	(hl-), a
+      000737 2B               [ 8] 1179 	dec	hl
+      000738 7E               [ 8] 1180 	ld	a, (hl)
+      000739 B7               [ 4] 1181 	or	a, a
+      00073A 28 1E            [12] 1182 	jr	Z, 00171$
+      00073C 2B               [ 8] 1183 	dec	hl
+      00073D CB 46            [12] 1184 	bit	0, (hl)
+      00073F 28 19            [12] 1185 	jr	Z, 00171$
+                                   1186 ;main.c:93: btwJoy();
+      000741 CDrC2r00         [24] 1187 	call	_btwJoy
+                                   1188 ;main.c:94: if (J_SELECT & joypad()) {
+      000744 CDr00r00         [24] 1189 	call	_joypad
+      000747 CB 77            [ 8] 1190 	bit	6, a
+      000749 28 E7            [12] 1191 	jr	Z, 00128$
+                                   1192 ;main.c:96: cls();
+      00074B CDr00r00         [24] 1193 	call	_cls
+                                   1194 ;main.c:97: selectionScreen(S);
+      00074E F8 03            [12] 1195 	ldhl	sp,	#3
+      000750 7E               [ 8] 1196 	ld	a, (hl)
+      000751 CDrA4r05         [24] 1197 	call	_selectionScreen
+                                   1198 ;main.c:98: sele = false;
+      000754 F8 00            [12] 1199 	ldhl	sp,	#0
+      000756 36 00            [12] 1200 	ld	(hl), #0x00
+      000758 18 D8            [12] 1201 	jr	00128$
+                                   1202 ;main.c:101: while(S == 2 && sele) {
+      00075A                       1203 00171$:
+      00075A F8 02            [12] 1204 	ldhl	sp,	#2
+      00075C 2A               [ 8] 1205 	ld	a, (hl+)
+      00075D 23               [ 8] 1206 	inc	hl
+      00075E 77               [ 8] 1207 	ld	(hl), a
+      00075F                       1208 00134$:
+      00075F F8 04            [12] 1209 	ldhl	sp,	#4
+      000761 7E               [ 8] 1210 	ld	a, (hl)
+      000762 B7               [ 4] 1211 	or	a, a
+      000763 28 1F            [12] 1212 	jr	Z, 00140$
+      000765 F8 00            [12] 1213 	ldhl	sp,	#0
+      000767 CB 46            [12] 1214 	bit	0, (hl)
+      000769 28 19            [12] 1215 	jr	Z, 00140$
+                                   1216 ;main.c:102: timerJoy();
+      00076B CDrFCr04         [24] 1217 	call	_timerJoy
+                                   1218 ;main.c:103: if (J_SELECT & joypad()) {
+      00076E CDr00r00         [24] 1219 	call	_joypad
+      000771 CB 77            [ 8] 1220 	bit	6, a
+      000773 28 EA            [12] 1221 	jr	Z, 00134$
+                                   1222 ;main.c:105: cls();
+      000775 CDr00r00         [24] 1223 	call	_cls
+                                   1224 ;main.c:106: selectionScreen(S);
+      000778 F8 03            [12] 1225 	ldhl	sp,	#3
+      00077A 7E               [ 8] 1226 	ld	a, (hl)
+      00077B CDrA4r05         [24] 1227 	call	_selectionScreen
+                                   1228 ;main.c:107: sele = false;
+      00077E F8 00            [12] 1229 	ldhl	sp,	#0
+      000780 36 00            [12] 1230 	ld	(hl), #0x00
+      000782 18 DB            [12] 1231 	jr	00134$
+                                   1232 ;main.c:110: while(S == 0 && sele) {
+      000784                       1233 00140$:
+      000784 F8 06            [12] 1234 	ldhl	sp,	#6
+      000786 3A               [ 8] 1235 	ld	a, (hl-)
+      000787 B6               [ 8] 1236 	or	a, (hl)
+      000788 20 A2            [12] 1237 	jr	NZ, 00143$
+      00078A F8 00            [12] 1238 	ldhl	sp,	#0
+      00078C CB 46            [12] 1239 	bit	0, (hl)
+      00078E 28 9C            [12] 1240 	jr	Z, 00143$
+                                   1241 ;main.c:111: currencyJoy();
+      000790 CDrF9r03         [24] 1242 	call	_currencyJoy
+                                   1243 ;main.c:112: if (J_SELECT & joypad()) {
+      000793 CDr00r00         [24] 1244 	call	_joypad
+      000796 CB 77            [ 8] 1245 	bit	6, a
+      000798 28 EA            [12] 1246 	jr	Z, 00140$
+                                   1247 ;main.c:114: cls();
+      00079A CDr00r00         [24] 1248 	call	_cls
+                                   1249 ;main.c:115: selectionScreen(S);
+      00079D F8 03            [12] 1250 	ldhl	sp,	#3
+      00079F 7E               [ 8] 1251 	ld	a, (hl)
+      0007A0 CDrA4r05         [24] 1252 	call	_selectionScreen
+                                   1253 ;main.c:116: sele = false;
+      0007A3 F8 00            [12] 1254 	ldhl	sp,	#0
+      0007A5 36 00            [12] 1255 	ld	(hl), #0x00
+      0007A7 18 DB            [12] 1256 	jr	00140$
+      0007A9                       1257 00145$:
+                                   1258 ;main.c:143: DISABLE_RAM_MBC1;
+      0007A9 21r00r00         [12] 1259 	ld	hl, #_rRAMG
+      0007AC 36 00            [12] 1260 	ld	(hl), #0x00
+      0007AE C3r92r06         [16] 1261 	jp	00122$
+                                   1262 ;main.c:145: }
+      0007B1 E8 07            [16] 1263 	add	sp, #7
+      0007B3 C9               [16] 1264 	ret
+                                   1265 	.area _CODE
+      0007B4                       1266 ___str_32:
+      0007B4 30                    1267 	.ascii "0"
+      0007B5 00                    1268 	.db 0x00
+      0007B6                       1269 ___str_33:
+      0007B6 43 75 72 72 65 6E 63  1270 	.ascii "Currency Convert"
+             79 20 43 6F 6E 76 65
+             72 74
+      0007C6 0A                    1271 	.db 0x0a
+      0007C7 0A                    1272 	.db 0x0a
+      0007C8 20 2D 2D 3E           1273 	.ascii " -->"
+      0007CC 00                    1274 	.db 0x00
+      0007CD                       1275 ___str_34:
+      0007CD 42 54 57              1276 	.ascii "BTW"
+      0007D0 0A                    1277 	.db 0x0a
+      0007D1 0A                    1278 	.db 0x0a
+      0007D2 20 3C 2D 2D 20 2D 2D  1279 	.ascii " <-- -->"
+             3E
+      0007DA 00                    1280 	.db 0x00
+      0007DB                       1281 ___str_35:
+      0007DB 54 69 6D 65 72        1282 	.ascii "Timer"
+      0007E0 0A                    1283 	.db 0x0a
+      0007E1 0A                    1284 	.db 0x0a
+      0007E2 20 3C 2D 2D           1285 	.ascii " <--"
+      0007E6 00                    1286 	.db 0x00
+                                   1287 	.area _INITIALIZER
+      000000                       1288 __xinit__s:
+      000000 00                    1289 	.db #0x00	; 0
+      000001                       1290 __xinit__b:
+      000001 06                    1291 	.db #0x06	; 6
+      000002 0C                    1292 	.db #0x0c	; 12
+      000003 15                    1293 	.db #0x15	; 21
+      000004                       1294 __xinit__j:
+      000004 00                    1295 	.db #0x00	; 0
+      000005                       1296 __xinit__l:
+      000005 03                    1297 	.db #0x03	; 3
+      000006                       1298 __xinit__amount:
+      000006 00                    1299 	.db #0x00	; 0
+      000007                       1300 __xinit__r:
+      000007 00                    1301 	.db #0x00	; 0
+      000008 00                    1302 	.db #0x00	; 0
+      000009 00                    1303 	.db #0x00	; 0
+      00000A                       1304 __xinit__countTimer:
+      00000A 00                    1305 	.db #0x00	; 0
+      00000B                       1306 __xinit__stopCount:
+      00000B 00                    1307 	.db #0x00	; 0
+      00000C                       1308 __xinit__TileLabel:
+      00000C 01                    1309 	.db #0x01	; 1
+      00000D 01                    1310 	.db #0x01	; 1
+      00000E 01                    1311 	.db #0x01	; 1
+      00000F 01                    1312 	.db #0x01	; 1
+      000010 31                    1313 	.db #0x31	; 49	'1'
+      000011 31                    1314 	.db #0x31	; 49	'1'
+      000012 29                    1315 	.db #0x29	; 41
+      000013 29                    1316 	.db #0x29	; 41
+      000014 29                    1317 	.db #0x29	; 41
+      000015 29                    1318 	.db #0x29	; 41
+      000016 01                    1319 	.db #0x01	; 1
+      000017 01                    1320 	.db #0x01	; 1
+      000018 FF                    1321 	.db #0xff	; 255
+      000019 FF                    1322 	.db #0xff	; 255
+      00001A FF                    1323 	.db #0xff	; 255
+      00001B FF                    1324 	.db #0xff	; 255
+      00001C FF                    1325 	.db #0xff	; 255
+      00001D FF                    1326 	.db #0xff	; 255
+      00001E FF                    1327 	.db #0xff	; 255
+      00001F FF                    1328 	.db #0xff	; 255
+      000020 FF                    1329 	.db #0xff	; 255
+      000021 FF                    1330 	.db #0xff	; 255
+      000022 00                    1331 	.db #0x00	; 0
+      000023 00                    1332 	.db #0x00	; 0
+      000024 00                    1333 	.db #0x00	; 0
+      000025 00                    1334 	.db #0x00	; 0
+      000026 00                    1335 	.db #0x00	; 0
+      000027 00                    1336 	.db #0x00	; 0
+      000028 00                    1337 	.db #0x00	; 0
+      000029 00                    1338 	.db #0x00	; 0
+      00002A 00                    1339 	.db #0x00	; 0
+      00002B 00                    1340 	.db #0x00	; 0
+      00002C C0                    1341 	.db #0xc0	; 192
+      00002D C0                    1342 	.db #0xc0	; 192
+      00002E C0                    1343 	.db #0xc0	; 192
+      00002F C0                    1344 	.db #0xc0	; 192
+      000030 C0                    1345 	.db #0xc0	; 192
+      000031 C0                    1346 	.db #0xc0	; 192
+      000032 C0                    1347 	.db #0xc0	; 192
+      000033 C0                    1348 	.db #0xc0	; 192
+      000034 C0                    1349 	.db #0xc0	; 192
+      000035 C0                    1350 	.db #0xc0	; 192
+      000036 C0                    1351 	.db #0xc0	; 192
+      000037 C0                    1352 	.db #0xc0	; 192
+      000038 C0                    1353 	.db #0xc0	; 192
+      000039 C0                    1354 	.db #0xc0	; 192
+      00003A C0                    1355 	.db #0xc0	; 192
+      00003B C0                    1356 	.db #0xc0	; 192
+      00003C C0                    1357 	.db #0xc0	; 192
+      00003D C0                    1358 	.db #0xc0	; 192
+      00003E C0                    1359 	.db #0xc0	; 192
+      00003F C0                    1360 	.db #0xc0	; 192
+      000040 C0                    1361 	.db #0xc0	; 192
+      000041 C0                    1362 	.db #0xc0	; 192
+      000042 00                    1363 	.db #0x00	; 0
+      000043 00                    1364 	.db #0x00	; 0
+      000044 00                    1365 	.db #0x00	; 0
+      000045 00                    1366 	.db #0x00	; 0
+      000046 00                    1367 	.db #0x00	; 0
+      000047 00                    1368 	.db #0x00	; 0
+      000048 00                    1369 	.db #0x00	; 0
+      000049 00                    1370 	.db #0x00	; 0
+      00004A 00                    1371 	.db #0x00	; 0
+      00004B 00                    1372 	.db #0x00	; 0
+      00004C 00                    1373 	.db #0x00	; 0
+      00004D 00                    1374 	.db #0x00	; 0
+      00004E 00                    1375 	.db #0x00	; 0
+      00004F 00                    1376 	.db #0x00	; 0
+      000050 00                    1377 	.db #0x00	; 0
+      000051 00                    1378 	.db #0x00	; 0
+      000052 00                    1379 	.db #0x00	; 0
+      000053 00                    1380 	.db #0x00	; 0
+      000054 00                    1381 	.db #0x00	; 0
+      000055 00                    1382 	.db #0x00	; 0
+      000056 00                    1383 	.db #0x00	; 0
+      000057 00                    1384 	.db #0x00	; 0
+      000058 00                    1385 	.db #0x00	; 0
+      000059 00                    1386 	.db #0x00	; 0
+      00005A 00                    1387 	.db #0x00	; 0
+      00005B 00                    1388 	.db #0x00	; 0
+      00005C 00                    1389 	.db #0x00	; 0
+      00005D 00                    1390 	.db #0x00	; 0
+      00005E 00                    1391 	.db #0x00	; 0
+      00005F 00                    1392 	.db #0x00	; 0
+      000060 00                    1393 	.db #0x00	; 0
+      000061 00                    1394 	.db #0x00	; 0
+      000062 00                    1395 	.db #0x00	; 0
+      000063 00                    1396 	.db #0x00	; 0
+      000064 00                    1397 	.db #0x00	; 0
+      000065 00                    1398 	.db #0x00	; 0
+      000066 00                    1399 	.db #0x00	; 0
+      000067 00                    1400 	.db #0x00	; 0
+      000068 00                    1401 	.db #0x00	; 0
+      000069 00                    1402 	.db #0x00	; 0
+      00006A 00                    1403 	.db #0x00	; 0
+      00006B 00                    1404 	.db #0x00	; 0
+      00006C 01                    1405 	.db #0x01	; 1
+      00006D 01                    1406 	.db #0x01	; 1
+      00006E 01                    1407 	.db #0x01	; 1
+      00006F 01                    1408 	.db #0x01	; 1
+      000070 01                    1409 	.db #0x01	; 1
+      000071 01                    1410 	.db #0x01	; 1
+      000072 01                    1411 	.db #0x01	; 1
+      000073 01                    1412 	.db #0x01	; 1
+      000074 01                    1413 	.db #0x01	; 1
+      000075 01                    1414 	.db #0x01	; 1
+      000076 00                    1415 	.db #0x00	; 0
+      000077 00                    1416 	.db #0x00	; 0
+      000078 00                    1417 	.db #0x00	; 0
+      000079 00                    1418 	.db #0x00	; 0
+      00007A 00                    1419 	.db #0x00	; 0
+      00007B 00                    1420 	.db #0x00	; 0
+      00007C 00                    1421 	.db #0x00	; 0
+      00007D 00                    1422 	.db #0x00	; 0
+      00007E 00                    1423 	.db #0x00	; 0
+      00007F 00                    1424 	.db #0x00	; 0
+      000080 00                    1425 	.db #0x00	; 0
+      000081 00                    1426 	.db #0x00	; 0
+      000082 00                    1427 	.db #0x00	; 0
+      000083 00                    1428 	.db #0x00	; 0
+      000084 00                    1429 	.db #0x00	; 0
+      000085 00                    1430 	.db #0x00	; 0
+      000086 00                    1431 	.db #0x00	; 0
+      000087 00                    1432 	.db #0x00	; 0
+      000088 00                    1433 	.db #0x00	; 0
+      000089 00                    1434 	.db #0x00	; 0
+      00008A 00                    1435 	.db #0x00	; 0
+      00008B 00                    1436 	.db #0x00	; 0
+      00008C 00                    1437 	.db #0x00	; 0
+      00008D 00                    1438 	.db #0x00	; 0
+      00008E 00                    1439 	.db #0x00	; 0
+      00008F 00                    1440 	.db #0x00	; 0
+      000090 00                    1441 	.db #0x00	; 0
+      000091 00                    1442 	.db #0x00	; 0
+      000092 00                    1443 	.db #0x00	; 0
+      000093 00                    1444 	.db #0x00	; 0
+      000094 00                    1445 	.db #0x00	; 0
+      000095 00                    1446 	.db #0x00	; 0
+      000096 00                    1447 	.db #0x00	; 0
+      000097 00                    1448 	.db #0x00	; 0
+      000098 00                    1449 	.db #0x00	; 0
+      000099 00                    1450 	.db #0x00	; 0
+      00009A 00                    1451 	.db #0x00	; 0
+      00009B 00                    1452 	.db #0x00	; 0
+      00009C 00                    1453 	.db #0x00	; 0
+      00009D 00                    1454 	.db #0x00	; 0
+      00009E 00                    1455 	.db #0x00	; 0
+      00009F 00                    1456 	.db #0x00	; 0
+      0000A0 00                    1457 	.db #0x00	; 0
+      0000A1 00                    1458 	.db #0x00	; 0
+      0000A2 00                    1459 	.db #0x00	; 0
+      0000A3 00                    1460 	.db #0x00	; 0
+      0000A4 00                    1461 	.db #0x00	; 0
+      0000A5 00                    1462 	.db #0x00	; 0
+      0000A6 C0                    1463 	.db #0xc0	; 192
+      0000A7 C0                    1464 	.db #0xc0	; 192
+      0000A8 80                    1465 	.db #0x80	; 128
+      0000A9 80                    1466 	.db #0x80	; 128
+      0000AA 07                    1467 	.db #0x07	; 7
+      0000AB 07                    1468 	.db #0x07	; 7
+      0000AC 00                    1469 	.db #0x00	; 0
+      0000AD 00                    1470 	.db #0x00	; 0
+      0000AE 00                    1471 	.db #0x00	; 0
+      0000AF 00                    1472 	.db #0x00	; 0
+      0000B0 00                    1473 	.db #0x00	; 0
+      0000B1 00                    1474 	.db #0x00	; 0
+      0000B2 00                    1475 	.db #0x00	; 0
+      0000B3 00                    1476 	.db #0x00	; 0
+      0000B4 00                    1477 	.db #0x00	; 0
+      0000B5 00                    1478 	.db #0x00	; 0
+      0000B6 00                    1479 	.db #0x00	; 0
+      0000B7 00                    1480 	.db #0x00	; 0
+      0000B8 00                    1481 	.db #0x00	; 0
+      0000B9 00                    1482 	.db #0x00	; 0
+      0000BA 00                    1483 	.db #0x00	; 0
+      0000BB 00                    1484 	.db #0x00	; 0
+      0000BC 00                    1485 	.db #0x00	; 0
+      0000BD 00                    1486 	.db #0x00	; 0
+      0000BE 00                    1487 	.db #0x00	; 0
+      0000BF 00                    1488 	.db #0x00	; 0
+      0000C0 00                    1489 	.db #0x00	; 0
+      0000C1 00                    1490 	.db #0x00	; 0
+      0000C2 00                    1491 	.db #0x00	; 0
+      0000C3 00                    1492 	.db #0x00	; 0
+      0000C4 00                    1493 	.db #0x00	; 0
+      0000C5 00                    1494 	.db #0x00	; 0
+      0000C6 00                    1495 	.db #0x00	; 0
+      0000C7 00                    1496 	.db #0x00	; 0
+      0000C8 00                    1497 	.db #0x00	; 0
+      0000C9 00                    1498 	.db #0x00	; 0
+      0000CA 00                    1499 	.db #0x00	; 0
+      0000CB 00                    1500 	.db #0x00	; 0
+      0000CC 00                    1501 	.db #0x00	; 0
+      0000CD 00                    1502 	.db #0x00	; 0
+      0000CE 00                    1503 	.db #0x00	; 0
+      0000CF 00                    1504 	.db #0x00	; 0
+      0000D0 00                    1505 	.db #0x00	; 0
+      0000D1 00                    1506 	.db #0x00	; 0
+      0000D2 00                    1507 	.db #0x00	; 0
+      0000D3 00                    1508 	.db #0x00	; 0
+      0000D4 80                    1509 	.db #0x80	; 128
+      0000D5 80                    1510 	.db #0x80	; 128
+      0000D6 C0                    1511 	.db #0xc0	; 192
+      0000D7 C0                    1512 	.db #0xc0	; 192
+      0000D8 3F                    1513 	.db #0x3f	; 63
+      0000D9 3F                    1514 	.db #0x3f	; 63
+      0000DA 00                    1515 	.db #0x00	; 0
+      0000DB 00                    1516 	.db #0x00	; 0
+      0000DC 00                    1517 	.db #0x00	; 0
+      0000DD 00                    1518 	.db #0x00	; 0
+      0000DE 00                    1519 	.db #0x00	; 0
+      0000DF 00                    1520 	.db #0x00	; 0
+      0000E0 00                    1521 	.db #0x00	; 0
+      0000E1 00                    1522 	.db #0x00	; 0
+      0000E2 00                    1523 	.db #0x00	; 0
+      0000E3 00                    1524 	.db #0x00	; 0
+      0000E4 00                    1525 	.db #0x00	; 0
+      0000E5 00                    1526 	.db #0x00	; 0
+      0000E6 00                    1527 	.db #0x00	; 0
+      0000E7 00                    1528 	.db #0x00	; 0
+      0000E8 00                    1529 	.db #0x00	; 0
+      0000E9 00                    1530 	.db #0x00	; 0
+      0000EA 00                    1531 	.db #0x00	; 0
+      0000EB 00                    1532 	.db #0x00	; 0
+      0000EC C0                    1533 	.db #0xc0	; 192
+      0000ED C0                    1534 	.db #0xc0	; 192
+      0000EE 40                    1535 	.db #0x40	; 64
+      0000EF 40                    1536 	.db #0x40	; 64
+      0000F0 40                    1537 	.db #0x40	; 64
+      0000F1 40                    1538 	.db #0x40	; 64
+      0000F2 40                    1539 	.db #0x40	; 64
+      0000F3 40                    1540 	.db #0x40	; 64
+      0000F4 40                    1541 	.db #0x40	; 64
+      0000F5 40                    1542 	.db #0x40	; 64
+      0000F6 C0                    1543 	.db #0xc0	; 192
+      0000F7 C0                    1544 	.db #0xc0	; 192
+      0000F8 80                    1545 	.db #0x80	; 128
+      0000F9 80                    1546 	.db #0x80	; 128
+      0000FA 00                    1547 	.db #0x00	; 0
+      0000FB 00                    1548 	.db #0x00	; 0
+      0000FC 00                    1549 	.db #0x00	; 0
+      0000FD 00                    1550 	.db #0x00	; 0
+      0000FE 00                    1551 	.db #0x00	; 0
+      0000FF 00                    1552 	.db #0x00	; 0
+      000100 00                    1553 	.db #0x00	; 0
+      000101 00                    1554 	.db #0x00	; 0
+      000102 00                    1555 	.db #0x00	; 0
+      000103 00                    1556 	.db #0x00	; 0
+      000104 00                    1557 	.db #0x00	; 0
+      000105 00                    1558 	.db #0x00	; 0
+      000106 00                    1559 	.db #0x00	; 0
+      000107 00                    1560 	.db #0x00	; 0
+      000108 00                    1561 	.db #0x00	; 0
+      000109 00                    1562 	.db #0x00	; 0
+      00010A 00                    1563 	.db #0x00	; 0
+      00010B 00                    1564 	.db #0x00	; 0
+      00010C                       1565 __xinit__SS:
+      00010CrB4r07                 1566 	.dw ___str_32
+      00010ErB6r07                 1567 	.dw ___str_33
+      000110rCDr07                 1568 	.dw ___str_34
+      000112rDBr07                 1569 	.dw ___str_35
+                                   1570 	.area _CABS (ABS)
